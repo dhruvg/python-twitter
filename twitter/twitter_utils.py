@@ -266,7 +266,10 @@ def enf_type(field, _type, val):
 
     """
     try:
-        return _type(val)
+        if _type is bool:
+            return str(_type(val)).lower()
+        else:
+            return _type(val)
     except ValueError:
         raise TwitterError({
             'message': '"{0}" must be type {1}'.format(field, _type.__name__)
