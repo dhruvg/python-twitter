@@ -460,6 +460,9 @@ class Status(TwitterModel):
         Returns:
             A twitter.Status instance
         """
+        if data is None:
+            return None
+
         current_user_retweet = None
         hashtags = None
         media = None
