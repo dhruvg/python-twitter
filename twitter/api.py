@@ -799,15 +799,13 @@ class Api(object):
 
         url = '%s/statuses/lookup.json' % (self.base_url)
 
-        for id in ids:
-            try:
-                int(id)
-            except ValueError:
-                raise TwitterError({'message': "'ids' must all be integers."})
+        try:
+            ids = [int(_id) for _id in ids]
+        except ValueError:
+            raise TwitterError({'message': "'ids' must all be integers."})
 
         parameters = {}
-
-        parameters['id'] = ",".join(str(i) for i in ids)
+        parameters['id'] = ",".join([str(_id) for _id in ids])
 
         if trim_user:
             parameters['trim_user'] = 1
