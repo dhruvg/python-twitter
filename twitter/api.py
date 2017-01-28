@@ -814,8 +814,8 @@ class Api(object):
         if map:
             parameters['map'] = 'true'
 
-        json_data = self._RequestUrl(url, 'GET', data=parameters)
-        data = self._ParseAndCheckTwitter(json_data.content)
+        resp = self._RequestUrl(url, 'GET', data=parameters)
+        data = self._ParseAndCheckTwitter(resp.content.decode('utf-8'))
 
         statuses = [Status.NewFromJsonDict(status) for status in data]
         return statuses
