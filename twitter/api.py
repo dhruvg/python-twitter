@@ -766,6 +766,63 @@ class Api(object):
 
         return [Status.NewFromJsonDict(x) for x in data]
 
+    def StatusesLookup(self,
+                       ids,
+                       trim_user=False,
+                       include_entities=True,
+                       map=True):
+        """Returns a list of status messages, specified by comma delimited ids
+
+        The twitter.Api instance must be authenticated.
+        You are limited to 100 ids at a time.
+
+        Args:
+          ids:
+            An iterable of numeric ID(s) of the status(es) you are trying to retrieve.
+          trim_user:
+            When set to True, each tweet returned in a timeline will include
+            a user object including only the status authors numerical ID.
+            Omit this parameter to receive the complete user object. [Optional]
+          include_entities:
+            If False, the entities node will be disincluded.
+            This node offers a variety of metadata about the tweet in a
+            discreet structure, including: user_mentions, urls, and
+            hashtags. [Optional]
+          map:
+            tweets that do not exist or cannot be viewed by the current
+            user will have their key represented but with an explicitly
+            null value paired with it. [Optional]
+
+        Returns:
+          A list of twitter.Status instances representing the status messages
+        """
+
+        url = '%s/statuses/lookup.json' % (self.base_url)
+
+        for id in ids:
+            try:
+                int(id)
+            except ValueError:
+                raise TwitterError({'message': "'ids' must all be integers."})
+
+        parameters = {}
+
+        parameters['id'] = ",".join(str(i) for i in ids)
+
+        if trim_user:
+            parameters['trim_user'] = 1
+        if not include_entities:
+            parameters['include_entities'] = 'false'
+        if map:
+            parameters['map'] = 'true'
+
+        json_data = self._RequestUrl(url, 'GET', data=parameters)
+        data = self._ParseAndCheckTwitter(json_data.content)
+
+        statuses = [Status.NewFromJsonDict(status) for status in data]
+        return statuses
+
+
     def GetStatus(self,
                   status_id,
                   trim_user=False,
