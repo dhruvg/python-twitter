@@ -817,7 +817,7 @@ class Api(object):
         resp = self._RequestUrl(url, 'GET', data=parameters)
         data = self._ParseAndCheckTwitter(resp.content.decode('utf-8'))
 
-        statuses = {status_id: Status.NewFromJsonDict(status) for status_id, status in data.items()}
+        statuses = {status_id: Status.NewFromJsonDict(status) for status_id, status in data['id'].items()}
         return statuses
 
 
