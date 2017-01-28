@@ -476,7 +476,8 @@ class Status(TwitterModel):
         if 'retweeted_status' in data:
             retweeted_status = Status.NewFromJsonDict(data['retweeted_status'])
         if 'current_user_retweet' in data:
-            current_user_retweet = data['current_user_retweet']['id']
+            if data['current_user_retweet'] is not None:
+                current_user_retweet = data['current_user_retweet']['id']
 
         if 'entities' in data:
             if 'urls' in data['entities']:
