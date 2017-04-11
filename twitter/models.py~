@@ -485,13 +485,17 @@ class Status(TwitterModel):
         if 'retweeted_status' in data:
             retweeted_status = Status.NewFromJsonDict(data['retweeted_status'])
         if 'current_user_retweet' in data:
+<<<<<<< HEAD
             if data['current_user_retweet'] is not None:
                 if not isinstance(data['current_user_retweet'], dict):
                     current_user_retweet = data['current_user_retweet']
                 else:
                     current_user_retweet = data['current_user_retweet']['id']
+=======
+            current_user_retweet = data['current_user_retweet']['id']
         if 'quoted_status' in data:
             quoted_status = Status.NewFromJsonDict(data.get('quoted_status'))
+>>>>>>> c9e2827... add support for quoted statuses
 
         if 'entities' in data:
             if 'urls' in data['entities']:
